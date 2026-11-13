@@ -13,6 +13,8 @@ class Limitwen < Formula
       odie "Limitwen requires Apple developer tools with Swift 6 or newer."
     end
 
+    # Homebrew already sandboxes this build; macOS rejects a nested SwiftPM sandbox.
+    inreplace "scripts/build.sh", "xcrun swift build", "xcrun swift build --disable-sandbox"
     system "./scripts/build.sh", "release"
     libexec.install "build/Limitwen.app"
     (bin/"limitwen").write <<~SH
