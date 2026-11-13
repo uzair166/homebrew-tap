@@ -1,0 +1,22 @@
+name: Install
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  install:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install source formula inside Homebrew sandbox
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: '1'
+          HOMEBREW_NO_INSTALL_CLEANUP: '1'
+        run: |
+          brew tap-new limitwen/ci
+          cp Formula/limitwen.rb "$(brew --repository)/Library/Taps/limitwen/homebrew-ci/Formula/limitwen.rb"
+          brew install --build-from-source limitwen/ci/limitwen
+          brew test limitwen/ci/limitwen
