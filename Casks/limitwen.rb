@@ -1,6 +1,6 @@
 cask "limitwen" do
-  version "0.1.1"
-  sha256 "6b2aa6dd6aa965c1cac9dd20c04309aa5882e9e560c71e5b0b1bcbde785d7709"
+  version "0.1.2"
+  sha256 "ea06062c32a04e7a0cc22e4bf813c6db2ec56a20f147dbf5167e5548fe8340fc"
 
   url "https://github.com/uzair166/limitwen-app/releases/download/v#{version}/Limitwen-#{version}-universal-notarized.zip"
   name "Limitwen"
