@@ -11,12 +11,19 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - name: Install source formula inside Homebrew sandbox
+      - name: Install notarized app into Applications and uninstall cleanly
         env:
           HOMEBREW_NO_AUTO_UPDATE: '1'
           HOMEBREW_NO_INSTALL_CLEANUP: '1'
         run: |
           brew tap-new limitwen/ci
-          cp Formula/limitwen.rb "$(brew --repository)/Library/Taps/limitwen/homebrew-ci/Formula/limitwen.rb"
-          brew install --build-from-source limitwen/ci/limitwen
-          brew test limitwen/ci/limitwen
+          mkdir -p "$(brew --repository)/Library/Taps/limitwen/homebrew-ci/Casks"
+          cp Casks/limitwen.rb "$(brew --repository)/Library/Taps/limitwen/homebrew-ci/Casks/limitwen.rb"
+          appdir="$RUNNER_TEMP/Applications"
+          brew install --cask limitwen/ci/limitwen --appdir="$appdir"
+          test -x "$appdir/Limitwen.app/Contents/MacOS/Limitwen"
+          codesign --verify --deep --strict "$appdir/Limitwen.app"
+          xcrun stapler validate "$appdir/Limitwen.app"
+          spctl --assess --type execute --verbose=2 "$appdir/Limitwen.app"
+          brew uninstall --cask limitwen/ci/limitwen
+          test ! -e "$appdir/Limitwen.app"
