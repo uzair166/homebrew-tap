@@ -19,9 +19,9 @@ jobs:
           brew tap-new limitwen/ci
           mkdir -p "$(brew --repository)/Library/Taps/limitwen/homebrew-ci/Casks"
           cp Casks/limitwen.rb "$(brew --repository)/Library/Taps/limitwen/homebrew-ci/Casks/limitwen.rb"
-          python3 scripts/check-cask.py limitwen/ci/limitwen
           appdir="$RUNNER_TEMP/Applications"
           brew install --cask limitwen/ci/limitwen --appdir="$appdir"
+          python3 scripts/check-cask.py limitwen/ci/limitwen
           test -x "$appdir/Limitwen.app/Contents/MacOS/Limitwen"
           codesign --verify --deep --strict "$appdir/Limitwen.app"
           xcrun stapler validate "$appdir/Limitwen.app"
