@@ -12,4 +12,9 @@ cask "limitwen" do
   app "Limitwen.app"
 
   uninstall quit: "app.limitwen.mac"
+
+  zap trash: [
+    "~/Library/Application Support/Limitwen",
+    "~/Library/Preferences/app.limitwen.mac.plist",
+  ]
 end
